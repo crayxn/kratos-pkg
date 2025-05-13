@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	kz "github.com/go-kratos/kratos/contrib/log/zap/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"go.uber.org/zap"
@@ -17,16 +18,17 @@ const (
 )
 
 type ZapConfig struct {
-	Level      string `json:"level;omitempty"`
-	Writer     int32  `json:"writer;omitempty"`
-	FileName   string `json:"file_name;omitempty"`
-	MaxSize    int32  `json:"max_size;omitempty"`
-	MaxBackups int32  `json:"max_backups;omitempty"`
-	MaxAge     int32  `json:"max_age;omitempty"`
-	Compress   bool   `json:"compress;omitempty"`
+	Level      string `json:"level"`
+	Writer     int32  `json:"writer"`
+	FileName   string `json:"file_name"`
+	MaxSize    int32  `json:"max_size"`
+	MaxBackups int32  `json:"max_backups"`
+	MaxAge     int32  `json:"max_age"`
+	Compress   bool   `json:"compress"`
 }
 
 func NewZapLogger(conf *ZapConfig) log.Logger {
+	fmt.Println(conf)
 	// choose logger
 	encoderCfg := zapcore.EncoderConfig{
 		MessageKey:     "msg",

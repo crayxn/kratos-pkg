@@ -9,35 +9,24 @@ import (
 )
 
 type NacosConfig struct {
-	Host        string `json:"host,omitempty"`
-	Port        int32  `json:"port,omitempty"`
-	Username    string `json:"username,omitempty"`
-	Password    string `json:"password,omitempty"`
-	GroupName   string `json:"group_name,omitempty"`
-	NamespaceId string `json:"namespace_id,omitempty"`
-	DataId      string `json:"data_id,omitempty"`
-	LogLevel    string `json:"log_level,omitempty"`
-	LogDir      string `json:"log_dir,omitempty"`
-	CacheDir    string `json:"cache_dir,omitempty"`
-}
-
-func NewRemoteConfigSource(conf kc.Config) kc.Source {
-	driver, err := conf.Value("remote_config.driver").String()
-	if err != nil || driver == "" {
-		driver = "nacos" //default nacos
-	}
-	if driver == "nacos" {
-		var c NacosConfig
-		if err := conf.Value("remote_config.nacos").Scan(&c); err != nil {
-			panic(err)
-		}
-		return NewNacosConfigSource(&c)
-	}
-	return nil
+	Host        string `json:"host"`
+	Port        int32  `json:"port"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	GroupName   string `json:"group_name"`
+	NamespaceId string `json:"namespace_id"`
+	DataId      string `json:"data_id"`
+	LogLevel    string `json:"log_level"`
+	LogDir      string `json:"log_dir"`
+	CacheDir    string `json:"cache_dir"`
 }
 
 // NewNacosConfigSource 创建Nacos配置源
-func NewNacosConfigSource(conf *NacosConfig) kc.Source {
+func NewNacosConfigSource(kc kc.Config) kc.Source {
+	var conf NacosConfig
+	if err := kc.Value("remote_config.nacos").Scan(&conf); err != nil {
+		panic(err)
+	}
 	//config default
 	if conf.LogLevel == "" {
 		conf.LogLevel = "error"

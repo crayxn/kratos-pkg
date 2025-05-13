@@ -5,6 +5,17 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 )
 
+func NewRemoteConfigSource(conf kc.Config) kc.Source {
+	driver, err := conf.Value("remote_config.driver").String()
+	if err != nil || driver == "" {
+		driver = "noop" //default nacos
+	}
+	if driver == "nacos" {
+		return NewNacosConfigSource(conf)
+	}
+	return nil
+}
+
 func New(path string) kc.Config {
 	basic := kc.New(
 		kc.WithSource(
