@@ -52,3 +52,11 @@ func NewRegistry(kc kc.Config) Registry {
 		return &MockGovernance{}
 	}
 }
+
+func NewRegistrar(r Registry) kr.Registrar {
+	return r.Register()
+}
+
+func NewDiscovery(r Registry) kr.Discovery {
+	return r.Discover()
+}
